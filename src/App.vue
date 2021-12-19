@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md">
     <q-table
-      
+      class="my-sticky-header-table"
       title="CISA Log4J Database"
       :filter="filter"
       no-data-label="I didn't find anything for you"
@@ -80,15 +80,15 @@ export default {
       q: useQuasar(),
       log4jData: [],
       columns: [
-        { name: 'Vendor', label: 'Vendor', field:"Vendor"},
+        { name: 'Vendor', label: 'Vendor', field:"Vendor", sortable: true},
         { name: 'Product', label: 'Product', field:"Product"},
         { name: 'Version', label: 'Version', field:"Version"},
-        { name: 'Status', label: 'Status', field:"Status"},
-        { name: 'Update available', label: 'Update available', field:"Update available"},
+        { name: 'Status', label: 'Status', field:"Status", sortable: true},
+        { name: 'Update available', label: 'Update available', field:"Update available", sortable: true},
         { name: 'Vendor_link', label: 'Vendor link', field:"Vendor_link", format: val => this.formatLinks(val)},
         { name: 'Notes', label: 'Notes', field:"Notes"},
         { name: 'Other References', label: 'Other References', field:"Other References"},
-        { name: 'Last Updated', label: 'Last Updated', field:"Last Updated"},
+        { name: 'Last Updated', label: 'Last Updated', field:"Last Updated", sortable: true},
       ],
       fields: [
         'Vendor',
@@ -191,4 +191,19 @@ export default {
     white-space: normal !important;
     overflow-wrap: anywhere !important;
 }
+</style>
+
+<style lang="sass">
+.my-sticky-header-table
+  /* height or max-height is important */
+  .q-table__top,
+  .q-table__bottom,
+  thead tr:first-child th
+    /* bg color is important for th; just specify one */
+    background-color: #c1f4cd
+  thead tr th
+    position: sticky
+    z-index: 1
+  thead tr:first-child th
+    top: 0
 </style>
