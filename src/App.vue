@@ -15,7 +15,7 @@
     <template v-slot:body-cell-Vendor_link="props">
         <q-td :props="props">
           <div>
-            <a :href="props.value" >External Link </a>
+            <a :href="props.value" target="_blank">External Link </a>
           </div>
         </q-td>
     </template>
