@@ -164,7 +164,7 @@ export default {
     },
     parseData(data) {
       let results = []
-      data = data.split('| ------ | -------------------- | ---- | ----- | --------------- | ----------- | ----- | ---------------- | ------------ |')[1]
+      data = data.split('| ------ | ------- | ---------- | ------ | ---------------- | ----------- | ----- | ---------------- | ------------ |')[1]
       let lines = data.split('\n').filter(n=>n)
       for (var line of lines) {
         let values = line.split('|').splice(1, 10)
