@@ -19,6 +19,12 @@
           </div>
         </q-td>
     </template>
+    <template v-slot:body-cell-Reporter="props">
+        <q-td :props="props">
+          <!-- <Markdown anchor :source="props.value"/> -->
+          <a :href="props.value" target="_blank">Reporter</a>
+        </q-td>
+    </template>
     <template v-slot:top-left>
         <q-input dense debounce="300" v-model="filter" placeholder="Search">
           <template v-slot:append>
@@ -63,13 +69,14 @@
 <script>
 import { exportFile, useQuasar } from 'quasar'
 import { ref } from 'vue'
-
 import EventService from "@/EventService.js";
+// import Markdown from 'vue3-markdown-it';
 
 export default {
   name: 'LayoutDefault',
 
   components: {
+    // Markdown,
   },
   data() {
     return {
@@ -82,23 +89,25 @@ export default {
       columns: [
         { name: 'Vendor', label: 'Vendor', field:"Vendor", sortable: true},
         { name: 'Product', label: 'Product', field:"Product"},
-        { name: 'Version', label: 'Version', field:"Version"},
+        { name: 'Affected_Version', label: 'Affected Version', field:"Affected_Version"},
+        { name: 'Patched_Version', label: 'Patched Version', field:"Patched_Version"},
         { name: 'Status', label: 'Status', field:"Status", sortable: true},
-        { name: 'Update available', label: 'Update available', field:"Update available", sortable: true},
         { name: 'Vendor_link', label: 'Vendor link', field:"Vendor_link", format: val => this.formatLinks(val)},
         { name: 'Notes', label: 'Notes', field:"Notes"},
-        { name: 'Other References', label: 'Other References', field:"Other References"},
+        { name: 'References', label: 'References', field:"References"},
+        { name: 'Reporter', label: 'Reporter', field:"Reporter", format: val => this.formatLinks(val)},
         { name: 'Last Updated', label: 'Last Updated', field:"Last Updated", sortable: true},
       ],
       fields: [
         'Vendor',
         'Product',
-        'Version',
+        'Affected_Version',
+        'Patched_Version',
         'Status',
-        'Update available',
         'Vendor_link',
         'Notes',
-        'Other References',
+        'References',
+        'Reporter',
         'Last Updated'
       ],
     }
@@ -164,7 +173,11 @@ export default {
     },
     parseData(data) {
       let results = []
-      data = data.split('| ------ | ------- | ---------- | ------ | ---------------- | ----------- | ----- | ---------------- | ------------ |')[1]
+      data = data.split('| ------ | ------- | ----------------- | ---------------- | ------ | ------------ | ----- | ---------- | -------- | ------------ |')[1]
+      if (!data) {
+        console.log('Couldn\'t parse data from CISA readme. They probably changed the format again.')
+        return []
+      }
       let lines = data.split('\n').filter(n=>n)
       for (var line of lines) {
         let values = line.split('|').splice(1, 10)
